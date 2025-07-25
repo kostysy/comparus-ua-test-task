@@ -31,9 +31,9 @@ tests using **Testcontainers**.
 - **Run the Spring Boot application**
 
 ```
-./gradlew clean build
+.\gradlew clean build
 docker compose up -d
-./gradlew bootRun 
+.\gradlew bootRun 
 ```
 Once started, the API will be available at: http://localhost:8080/api/users
 Swagger UI: http://localhost:8080/swagger-ui.html
@@ -49,7 +49,7 @@ connections to both Postgres and Oracle DB's. Liquibase manages both databases
 separately using Testcontainers. 
  
 ```
-./gradlew test
+.\gradlew test
 ```
 ---
 
