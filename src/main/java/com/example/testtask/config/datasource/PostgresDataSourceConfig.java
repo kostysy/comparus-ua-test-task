@@ -32,7 +32,7 @@ public class PostgresDataSourceConfig {
 
     @Bean(name = "postgresDataSource")
     public DataSource getDataSource() {
-        DataSourceBuilder builder = DataSourceBuilder.create();
+        DataSourceBuilder<?> builder = DataSourceBuilder.create();
         builder.driverClassName(environment.getProperty("spring.datasource.postgres.driver-class-name"));
         builder.url(environment.getProperty("spring.datasource.postgres.url"));
         builder.username(environment.getProperty("spring.datasource.postgres.username"));

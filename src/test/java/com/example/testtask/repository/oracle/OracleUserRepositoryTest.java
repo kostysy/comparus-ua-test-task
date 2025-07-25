@@ -1,7 +1,6 @@
 package com.example.testtask.repository.oracle;
 
 import com.example.testtask.entity.User;
-import com.example.testtask.repository.postgres.PostgresUserRepository;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import jakarta.persistence.EntityManagerFactory;
@@ -26,7 +25,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @Testcontainers
 @DataJpaTest

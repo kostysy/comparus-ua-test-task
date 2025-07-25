@@ -51,7 +51,8 @@ public class UsersControllerIntegrationTest {
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         List<User> users = response.getBody();
         Assertions.assertNotNull(users);
-        assertThat(users.size()).isGreaterThanOrEqualTo(6); // assuming 3 in each DB and we habe 2 databases
+        // assuming liquibase adds 3 in each DB and we habe 2 databases
+        assertThat(users.size()).isGreaterThanOrEqualTo(6);
         assertThat(users.get(0).getUsername()).isNotEmpty();
     }
 }

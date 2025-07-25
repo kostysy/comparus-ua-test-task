@@ -3,7 +3,6 @@ package com.example.testtask.service;
 import com.example.testtask.entity.User;
 import com.example.testtask.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
