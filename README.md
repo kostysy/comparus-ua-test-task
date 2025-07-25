@@ -31,7 +31,7 @@ tests using **Testcontainers**.
 - **Run the Spring Boot application**
 
 ```
-.\gradlew clean build
+.\gradlew clean build -x test
 docker compose up -d
 .\gradlew bootRun 
 ```
