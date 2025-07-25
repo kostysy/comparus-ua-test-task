@@ -7,6 +7,7 @@ with **OpenAPI/Swagger**. It includes integration and unit
 tests using **Testcontainers**.
 
 ---
+
 ## Features
 
 - Java 17, Gradle Build
@@ -18,12 +19,15 @@ tests using **Testcontainers**.
 - Docker-compatible setup
 
 ---
+
 ###  Prerequisites
 
 - Java 17+
 - Docker
 - Gradle
+
 ---
+
 ### Run Locally
 
 - **Build the project with Gradle**
@@ -36,12 +40,16 @@ docker compose up -d
 .\gradlew bootRun 
 ```
 Once started, the API will be available at: http://localhost:8080/api/users
+
 Swagger UI: http://localhost:8080/swagger-ui.html
+
 ---
 
 ### API Documentation
 - OpenAPI: Auto-generated via Springdoc
 - Access via: http://localhost:8080/swagger-ui.html
+
+---
 
 ### Testing 
 Application is fully covered with Unit and Integration testing ensuring database 
@@ -51,6 +59,7 @@ separately using Testcontainers.
 ```
 .\gradlew test
 ```
+
 ---
 
 ### Database Migrations
@@ -63,5 +72,6 @@ Managed via Liquibase
 - Disabled in test profile; configured manually for Testcontainers
 
 ---
+
 ### Authors
 Kostiantyn Naumenko
