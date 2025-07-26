@@ -46,8 +46,6 @@ class OracleUserRepositoryTest {
 
     @Autowired
     private OracleUserRepository oracleUserRepository;
-    @Autowired
-    private Environment environment;
 
     @Test
     void testOracleUserSave() {
@@ -69,6 +67,8 @@ class OracleUserRepositoryTest {
 
     @TestConfiguration
     static class OracleTestConfig {
+        @Autowired
+        private Environment environment;
 
         @Bean(value = "dataSource")
         public DataSource oracleDataSource() {
@@ -80,7 +80,8 @@ class OracleUserRepositoryTest {
         }
 
         @Bean(value = "entityManagerFactory")
-        public LocalContainerEntityManagerFactoryBean entityManagerFactory(@Qualifier("dataSource") DataSource dataSource, EntityManagerFactoryBuilder builder, Environment environment) {
+        public LocalContainerEntityManagerFactoryBean entityManagerFactory(@Qualifier("dataSource") DataSource dataSource,
+                                                                           EntityManagerFactoryBuilder builder) {
             return builder.dataSource(dataSource)
                     .properties(jpaProperties())
                     .packages(environment.getProperty(ENTITY_SCAN_PACKAGE))
@@ -90,12 +91,11 @@ class OracleUserRepositoryTest {
 
         @Bean
         public PlatformTransactionManager transactionManager(@Qualifier("entityManagerFactory") EntityManagerFactory entityManagerFactory) {
-
             return new JpaTransactionManager(entityManagerFactory);
         }
 
         @Bean
-        public SpringLiquibase oracleLiquibase(@Qualifier("dataSource") DataSource ds, Environment environment) {
+        public SpringLiquibase oracleLiquibase(@Qualifier("dataSource") DataSource ds) {
             SpringLiquibase liquibase = new SpringLiquibase();
             liquibase.setDataSource(ds);
             liquibase.setChangeLog(environment.getProperty(LIQUIBASE_ORACLE_CHANGELOG_FILE));

@@ -39,7 +39,7 @@ public class OracleDataSourceConfig {
 
     @Bean(name = "oracleDataSource")
     public DataSource getDataSource() {
-        DataSourceBuilder builder = DataSourceBuilder.create();
+        DataSourceBuilder<?> builder = DataSourceBuilder.create();
         builder.driverClassName(environment.getProperty("spring.datasource.oracle.driver-class-name"));
         builder.url(environment.getProperty("spring.datasource.oracle.url"));
         builder.username(environment.getProperty("spring.datasource.oracle.username"));

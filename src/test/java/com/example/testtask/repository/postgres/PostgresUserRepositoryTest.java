@@ -16,8 +16,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.core.env.Environment;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
-import org.springframework.test.context.DynamicPropertyRegistry;
-import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
@@ -28,7 +26,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @Testcontainers
 @DataJpaTest
@@ -49,8 +47,6 @@ class PostgresUserRepositoryTest {
 
     @Autowired
     private PostgresUserRepository prostgresUserRepository;
-    @Autowired
-    private Environment environment;
 
     @Test
     void testPostgresUserSave() {
@@ -72,6 +68,8 @@ class PostgresUserRepositoryTest {
 
     @TestConfiguration
     static class PostgresTestConfig {
+        @Autowired
+        private Environment environment;
 
         @Bean(value = "dataSource")
         public DataSource postgresDataSource() {
@@ -85,7 +83,7 @@ class PostgresUserRepositoryTest {
         @Bean(value = "entityManagerFactory")
         public LocalContainerEntityManagerFactoryBean entityManagerFactory(
                 @Qualifier("dataSource") DataSource dataSource,
-                EntityManagerFactoryBuilder builder, Environment environment) {
+                EntityManagerFactoryBuilder builder) {
             return builder
                     .dataSource(dataSource)
                     .properties(jpaProperties())
