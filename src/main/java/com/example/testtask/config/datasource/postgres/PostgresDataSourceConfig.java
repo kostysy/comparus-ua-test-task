@@ -1,4 +1,4 @@
-package com.example.testtask.config.datasource;
+package com.example.testtask.config.datasource.postgres;
 
 import jakarta.persistence.EntityManagerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -23,6 +23,7 @@ import java.util.Map;
         transactionManagerRef = "postgresTransactionManager"
 )
 public class PostgresDataSourceConfig {
+    public static final String DB_ENTITY_SCAN_PACKAGE = "db.entity.scan.package";
 
     private final Environment environment;
 
@@ -47,7 +48,7 @@ public class PostgresDataSourceConfig {
         return builder
                 .dataSource(dataSource)
                 .properties(jpaProperties())
-                .packages("com.example.testtask.entity")
+                .packages(environment.getProperty(DB_ENTITY_SCAN_PACKAGE))
                 .persistenceUnit("postgres")
                 .build();
     }

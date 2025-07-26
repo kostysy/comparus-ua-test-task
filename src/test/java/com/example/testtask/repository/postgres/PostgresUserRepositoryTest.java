@@ -13,6 +13,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
+import org.springframework.core.env.Environment;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.test.context.DynamicPropertyRegistry;
@@ -33,6 +34,9 @@ import static org.junit.jupiter.api.Assertions.*;
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class PostgresUserRepositoryTest {
+    private static final String ENTITY_SCAN_PACKAGE = "com.example.testtask.entity";
+    public static final String LIQUIBASE_POSTGRES_CHANGELOG_FILE = "liquibase.postgres.test.changelog.file";
+
     @Container
     static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:15")
             .withDatabaseName("testdb")
@@ -45,6 +49,8 @@ class PostgresUserRepositoryTest {
 
     @Autowired
     private PostgresUserRepository prostgresUserRepository;
+    @Autowired
+    private Environment environment;
 
     @Test
     void testPostgresUserSave() {
@@ -79,11 +85,11 @@ class PostgresUserRepositoryTest {
         @Bean(value = "entityManagerFactory")
         public LocalContainerEntityManagerFactoryBean entityManagerFactory(
                 @Qualifier("dataSource") DataSource dataSource,
-                EntityManagerFactoryBuilder builder) {
+                EntityManagerFactoryBuilder builder, Environment environment) {
             return builder
                     .dataSource(dataSource)
                     .properties(jpaProperties())
-                    .packages("com.example.testtask.entity")
+                    .packages(environment.getProperty(ENTITY_SCAN_PACKAGE))
                     .persistenceUnit("postgres")
                     .build();
         }
@@ -96,10 +102,10 @@ class PostgresUserRepositoryTest {
         }
 
         @Bean
-        public SpringLiquibase postgresLiquibase(@Qualifier("dataSource") DataSource ds) {
+        public SpringLiquibase postgresLiquibase(@Qualifier("dataSource") DataSource ds, Environment environment) {
             SpringLiquibase liquibase = new SpringLiquibase();
             liquibase.setDataSource(ds);
-            liquibase.setChangeLog("classpath:db/test/postgres-test-changelog.xml");
+            liquibase.setChangeLog(environment.getProperty(LIQUIBASE_POSTGRES_CHANGELOG_FILE));
             return liquibase;
         }
 
