@@ -1,7 +1,6 @@
 package com.example.testtask.repository;
 
 import com.example.testtask.entity.User;
-import org.hibernate.annotations.processing.Exclude;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.liquibase.LiquibaseAutoConfiguration;
@@ -9,7 +8,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @DataJpaTest(excludeAutoConfiguration = {LiquibaseAutoConfiguration.class})
 class UserRepositoryTest {
