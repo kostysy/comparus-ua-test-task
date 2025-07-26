@@ -53,7 +53,7 @@ Swagger UI: http://localhost:8080/swagger-ui.html
 
 ### Testing 
 Application is fully covered with Unit and Integration testing ensuring database 
-connections to both Postgres and Oracle DB's. Liquibase manages both databases
+connections to both Postgres and Oracle DB's using Testcontainers. Liquibase manages both databases
 separately using Testcontainers. 
  
 ```
@@ -65,9 +65,8 @@ separately using Testcontainers.
 ### Database Migrations
 Managed via Liquibase
 - Separate changelogs:
-    - db/oracle-init-changelog.xml
-    - db/postgres-init-changelog.xml
-
+    - db/oracle/oracle-init-changelog.xml
+    - db/postgre/postgres-init-changelog.xml
 - Auto-run at application startup (in main app)
 - Disabled in test profile; configured manually for Testcontainers
 
