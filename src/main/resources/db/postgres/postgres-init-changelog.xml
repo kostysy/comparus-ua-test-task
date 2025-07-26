@@ -15,5 +15,5 @@
             <column name="surname" type="VARCHAR(255)"/>
         </createTable>
     </changeSet>
-    <include file="/db/data/test-data-users.xml"/>
+    <include file="/db/users/users-data.xml"/>
 </databaseChangeLog>

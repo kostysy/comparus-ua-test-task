@@ -1,4 +1,4 @@
-package com.example.testtask.config.datasource;
+package com.example.testtask.config.datasource.oracle;
 
 import jakarta.persistence.EntityManagerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -24,6 +24,8 @@ import java.util.Map;
         transactionManagerRef = "oracleTransactionManager"
 )
 public class OracleDataSourceConfig {
+    public static final String DB_ENTITY_SCAN_PACKAGE = "db.entity.scan.package";
+
     private final Environment environment;
 
     public OracleDataSourceConfig(Environment environment) {
@@ -52,7 +54,7 @@ public class OracleDataSourceConfig {
         return builder
                 .dataSource(dataSource)
                 .properties(jpaProperties())
-                .packages("com.example.testtask.entity")
+                .packages(environment.getProperty(DB_ENTITY_SCAN_PACKAGE))
                 .persistenceUnit("oracle")
                 .build();
     }

@@ -13,6 +13,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
+import org.springframework.core.env.Environment;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -31,6 +32,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class OracleUserRepositoryTest {
+    private static final String ENTITY_SCAN_PACKAGE = "com.example.testtask.entity";
+    public static final String LIQUIBASE_ORACLE_CHANGELOG_FILE = "liquibase.oracle.test.changelog.file";
+
     @Container
     static OracleContainer oracle = new OracleContainer("gvenzl/oracle-xe")
             .withUsername("test")
@@ -63,9 +67,11 @@ class OracleUserRepositoryTest {
 
     @TestConfiguration
     static class OracleTestConfig {
+        @Autowired
+        private Environment environment;
 
         @Bean(value = "dataSource")
-        public DataSource postgresDataSource() {
+        public DataSource oracleDataSource() {
             HikariConfig config = new HikariConfig();
             config.setJdbcUrl(oracle.getJdbcUrl());
             config.setUsername(oracle.getUsername());
@@ -74,29 +80,25 @@ class OracleUserRepositoryTest {
         }
 
         @Bean(value = "entityManagerFactory")
-        public LocalContainerEntityManagerFactoryBean entityManagerFactory(
-                @Qualifier("dataSource") DataSource dataSource,
-                EntityManagerFactoryBuilder builder) {
-            return builder
-                    .dataSource(dataSource)
+        public LocalContainerEntityManagerFactoryBean entityManagerFactory(@Qualifier("dataSource") DataSource dataSource,
+                                                                           EntityManagerFactoryBuilder builder) {
+            return builder.dataSource(dataSource)
                     .properties(jpaProperties())
-                    .packages("com.example.testtask.entity")
+                    .packages(environment.getProperty(ENTITY_SCAN_PACKAGE))
                     .persistenceUnit("oracle")
                     .build();
         }
 
         @Bean
-        public PlatformTransactionManager transactionManager(
-                @Qualifier("entityManagerFactory") EntityManagerFactory entityManagerFactory) {
-
+        public PlatformTransactionManager transactionManager(@Qualifier("entityManagerFactory") EntityManagerFactory entityManagerFactory) {
             return new JpaTransactionManager(entityManagerFactory);
         }
 
         @Bean
-        public SpringLiquibase postgresLiquibase(@Qualifier("dataSource") DataSource ds) {
+        public SpringLiquibase oracleLiquibase(@Qualifier("dataSource") DataSource ds) {
             SpringLiquibase liquibase = new SpringLiquibase();
             liquibase.setDataSource(ds);
-            liquibase.setChangeLog("classpath:db/test/oracle-test-changelog.xml");
+            liquibase.setChangeLog(environment.getProperty(LIQUIBASE_ORACLE_CHANGELOG_FILE));
             return liquibase;
         }
 
